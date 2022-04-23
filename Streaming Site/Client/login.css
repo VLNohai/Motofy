@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url("Resources/PurpleBack.jpg");
+    background-size:auto;
+}
+
+.logo {
+    display: block;
+    font-size: 20px;
+    color: white;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.box{
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background:rgb(67, 0, 122);
+    text-align: center;
+    border-radius: 20px;
+}
+
+.box .credentials{
+    background: rgb(108, 0, 197);
+    display: block;
+    padding: 10px 30px;
+    margin-left: 35px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border-color: rgb(195, 0, 255);
+    text-align: center;
+    color: white;
+}
+
+.box h1{
+    color: white;
+    cursor: default;
+}
+
+.button{
+    background-color: rgb(196, 105, 231);
+    border-color: blueviolet;
+    color:white;
+    cursor:pointer;
+}
+
+.button:hover{
+    color:aqua;
+}
+
