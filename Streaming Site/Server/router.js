@@ -18,8 +18,16 @@ class router{
         {
             if(this.ReqPairs[req.url].protection == true)
             {
-                    res.
+                let body = '';
+                req.on('data', (chunk) => {
+                body += chunk;
+            })
+                if(!(body in userDatabase.userTokens) && 1==2)
+                {
+                    res.writeHead(200, {'Content-Type': 'text/html'});
+                    fs.createReadStream(__dirname + '/../Client/Error.html').pipe(res);
                     return;
+                }
             }
             this.ReqPairs[req.url].func(req, res);
         }

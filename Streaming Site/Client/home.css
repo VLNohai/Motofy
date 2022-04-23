@@ -1,10 +1,12 @@
 body {
     margin: 0;
+    padding: 0;
     background: url("Resources/PurpleBack.jpg");
+    background-size: 1920px;
 }
 
 header {
-    background: rgb(44, 0, 116);
+    background: rgb(91, 10, 79);
     color: white;
     padding: 15px 15px 0px 15px;
 }
@@ -21,7 +23,8 @@ nav ul{
 }
 
 nav ul li {
-    background: rgb(20, 0, 56);
+    background: rgb(177, 0, 151);
+    border-color: rgb(195, 0, 255);
     color: white;
     display: inline-block;
     list-style-type: none;

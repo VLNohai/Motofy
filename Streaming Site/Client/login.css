@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     background: url("Resources/PurpleBack.jpg");
-    background-size:auto;
+    background-size: 1920px;
 }
 
 .logo {
@@ -20,13 +20,13 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background:rgb(67, 0, 122);
+    background:rgb(91, 10, 79);
     text-align: center;
     border-radius: 20px;
 }
 
 .box .credentials{
-    background: rgb(108, 0, 197);
+    background: rgb(135, 26, 119);
     display: block;
     padding: 10px 30px;
     margin-left: 35px;
@@ -43,8 +43,8 @@ body {
 }
 
 .button{
-    background-color: rgb(196, 105, 231);
-    border-color: blueviolet;
+    background-color: rgb(177, 0, 151);
+    border-color: rgb(195, 0, 255);
     color:white;
     cursor:pointer;
 }

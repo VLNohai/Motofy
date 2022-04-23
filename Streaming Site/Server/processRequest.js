@@ -11,8 +11,13 @@ function login(items, res){
         console.log('login succesful');
         res.writeHead(200, {'Content-Type': 'text/plain'});
         let newID = makeid(10);
-        res.end('login succes ' + newID);
+        while(newID in userDatabase.userTokens)
+        {
+            newID = makeid(10);
+        }
         userDatabase.userTokens[username] = newID;
+        console.log(username + ' is assigned as ' + newID);
+        res.end('login succes ' + newID);
     }
     else
     {
