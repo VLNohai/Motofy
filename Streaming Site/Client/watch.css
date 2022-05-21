@@ -1,0 +1,40 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url("Resources/PurpleBack.jpg");
+    background-size: 1920px;
+}
+
+#timeline{
+    width: 90%;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#timeStamp{
+    margin: auto;
+    align-items: center;
+    align-self: center;
+    width: 20%;
+}
+
+#cover{
+    margin: auto;
+    width: 40%;
+    height: 20%;
+}
+
+.centerdiv{
+    color: white;
+    margin: auto;
+    align-items: center;
+    width: 0%;
+}
+
+.textdiv{
+    color: white;
+}
+
+#title{
+    color:white;
+}

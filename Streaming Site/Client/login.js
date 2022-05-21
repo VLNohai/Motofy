@@ -8,7 +8,7 @@ request.addEventListener("readystatechange", function () {
             tokens = request.responseText.split(' ');
             if(tokens[0] + " " + tokens[1] == "login succes")
             {
-                localStorage.setItem('IDTOKEN', tokens[2]);
+                document.cookie = tokens[2];
                 window.location.assign('http://localhost:3000/home');
             }
             else
@@ -19,7 +19,7 @@ request.addEventListener("readystatechange", function () {
             else
             if(request.responseText == "register succes")
             {
-                window.location.assign('http://localhost:3000/home');
+                window.location.assign('http://localhost:3000/login');
             }
             else
             if(request.responseText == "register failed")
@@ -63,6 +63,5 @@ function registerUser(){
 }
 
 function goToRegister(){
-    console.log("tried to register");
-    window.location.assign('http://localhost:3000/register');
+    window.location.assign('http://http://192.168.1.108:3000/register');
 }

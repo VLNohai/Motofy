@@ -1,29 +1,41 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Motofy</title>
-        <link href="home.css" rel=" stylesheet">
-    </head>
-    <body>
-        <button onclick="debug()"></button>
-        <header>
-            <nav>
-                <h1><i>Motofy</i></h1>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Your Account</a>
-                </ul>
-            </nav>
-        </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="home.css" rel=" stylesheet">
+    <script type="text/javascript" src="home.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1><i>Motofy</i></h1>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/artistlist">Artists</a></li>
+                <li><a href="/albums">Albums</a></li>
+                <li><a href="/account">Your Account</a></li>
+            </ul>
+        </nav>
+    </header>
+    <img src="Resources/Welcome.jpg"></img>
 
-        <div class="row">
-            <div class="col">col1</div>
-            <div class="col">col2</div>
-            <div class="col">col3</div>
+    <div class="boxrow">
+        <div id="boxrowartist">
+                Artists you may like:<br>
         </div>
+        <div id="boxrowsongs">
+                Songs you may like:<br>
+        </div>
+        <div id="boxrowhist">
+                Recently listened songs:<br>
+        </div>
+    </div>
 
-    </body>
-    <footer>@2022 up and running</footer>
-
-    <script src ="home.js"></script>
+    <footer>
+        <div>
+            @2022 up and running
+        </div>
+    </footer>
+    
+</body>
 </html>

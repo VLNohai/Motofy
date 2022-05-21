@@ -1,29 +1,66 @@
 var http = require('http');
 var fs = require('fs');
+var express = require('express');
+var app = express();
 var router = require('./router');
 const processRequest = require('./processRequest');
-;
+const fileupload = require('express-fileupload')
+var artistdatabase = require('./artistdatabase');
+const songdatabase = require('./songdatabase').songdatabase;
+const userDatabase = require('./userDatabase');
+const { isNullOrUndefined } = require('util');
+
 var myRouter = new router();
 
-myRouter.addroute(['/', '/login'], false, (req, res) => {
+myRouter.addroute(['/', '/login'], (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     fs.createReadStream(__dirname + '/../Client/login.html').pipe(res);
 })
 
-myRouter.addroute(['/register'], false, (req, res) => {
+myRouter.addroute(['/register'], (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     fs.createReadStream(__dirname + '/../Client/register.html').pipe(res);
 })
 
-myRouter.addroute(['/home'], true, (req, res) => {
+myRouter.addroute(['/artistlist'], (req, res) => {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    fs.createReadStream(__dirname + '/../Client/artistlist.html').pipe(res);
+})
+
+myRouter.addroute(['/watch'], (req, res, arg) => {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    if(arg == null || arg == undefined)
+        fs.createReadStream(__dirname + '/../Client/artistlist.html').pipe(res);
+    else
+    if(arg in songdatabase.songids)
+        fs.createReadStream(__dirname + '/../Client/watch.html').pipe(res);
+    else
+        fs.createReadStream(__dirname + '/../Client/Error.html').pipe(res);
+}, true)
+
+myRouter.addroute(['/artist'], (req, res, arg) => {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+
+    if(arg == null || arg == undefined)
+        fs.createReadStream(__dirname + '/../Client/artistlist.html').pipe(res);
+    else
+    if(arg in artistdatabase.artistids)
+        fs.createReadStream(__dirname + '/../Client/artist.html').pipe(res);
+    else
+        fs.createReadStream(__dirname + '/../Client/Error.html').pipe(res);
+}, true)
+
+myRouter.addroute(['/home'], (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     fs.createReadStream(__dirname + '/../Client/home.html').pipe(res);
 })
 
-myRouter.addroute(['/watch'], true, (req, res) => {
+myRouter.addroute(['/account'], (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    fs.createReadStream(__dirname + '/../Client/watch.html').pipe(res);
+    fs.createReadStream(__dirname + '/../Client/account.html').pipe(res);
 })
+
+artistdatabase.scanSongs();
 
 var server = http.createServer(function(req, res){
     console.log(req.url);
@@ -44,5 +81,5 @@ var server = http.createServer(function(req, res){
     }
 });
 
-server.listen(3000, '127.0.0.1');
+server.listen(3000, 'localhost');
 console.log('Server up and running');

@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url("Resources/PurpleBack.jpg");
+    background-size: 1920px;
+}
+
+#title{
+    text-align: center;
+    margin-top: 20px;
+    color: white;
+    font-size: 50px;
+}
+
+#frameofframes{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-left: 30%;
+    margin-right: 30%;
+    color:white;
+    text-align: center;
+    font-size: larger;
+}
+
+.frame{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    color:white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: larger;
+}
+
+.center{
+    color: white;
+    background-color: palevioletred;
+    border-color: palevioletred;
+}

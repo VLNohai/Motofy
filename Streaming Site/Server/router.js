@@ -7,29 +7,23 @@ class router{
         this.ReqPairs = {};
     };
 
-    addroute(request, protection, func){
+    addroute(request, func, hasArg=false){
         request.forEach(element => {
-            this.ReqPairs[element] = {func: func, protection: protection};
+            this.ReqPairs[element] = {func : func, hasArg : hasArg};
         });
     }
 
     route(req, res){
-        if(req.url in this.ReqPairs)
+        const URL = req.url.split('?')[0];
+        const arg = req.url.split('?')[1];
+        if(URL in this.ReqPairs)
         {
-            if(this.ReqPairs[req.url].protection == true)
-            {
-                let body = '';
-                req.on('data', (chunk) => {
-                body += chunk;
-            })
-                if(!(body in userDatabase.userTokens) && 1==2)
-                {
-                    res.writeHead(200, {'Content-Type': 'text/html'});
-                    fs.createReadStream(__dirname + '/../Client/Error.html').pipe(res);
-                    return;
-                }
+            if(this.ReqPairs[URL].hasArg){
+                this.ReqPairs[URL].func(req, res, arg);
             }
-            this.ReqPairs[req.url].func(req, res);
+            else{
+                this.ReqPairs[URL].func(req, res)
+            }
         }
         else
         {
@@ -42,6 +36,7 @@ class router{
                     case 'html': res.writeHead(200, {'Content-Type': 'text/html'}); break;
                     case 'css': res.writeHead(200, {'Content-Type': 'text/css'}); break;
                     case 'js': res.writeHead(200, {'Content-Type': 'text/javascript'}); break;
+                    case 'jpg': res.writeHead(200, {'Content-Type': 'image/jpeg'}); break;
                 }
                 fs.createReadStream(path).pipe(res);
             }

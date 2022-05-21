@@ -12,29 +12,43 @@
 
     <div class="music-container">
         <div class="music-info">
-            <h4 id="title">Opeth-Sorceress</h4>
+            <h4 id="title"></h4>
             <div class="progress-container">
                 <div class="progress"></div>
             </div>
         </div>
-        <audio src="Resources\Billie Eilish - bury a friend.mp3" id="audio"></audio>
+
         <div class="img-container">
-            <img src="Resources\When-We-All-Fall-Asleep.jpg" alt="music-cover" id="cover"></img>
+            <img alt="music-cover" id="cover"></img>
         </div>
 
-        <div class="navigation">
-            <button id="prev" class="action-btn">
-                <i class="fas fa-backward"></i>
+        <div class="centerdiv">
+            <button id="play" class="action-btn action-btn-big" onclick="PlayButtonPressed()" disabled>
+                Play
             </button>
-            <button id="play" class="action-btn action-btn-big">
-                <i class="fas fa-play"></i>
-            </button>
-            <button id="next" class="action-btn">
-                <i class="fas fa-forward"></i>
-            </button>
+        </div>
+        <div id="timeStamp" class="centerdiv">
+            0:00
         </div>
     </div>
 
-    <script src="watch.js"></script>
+    <div>
+    <input id="timeline" type="range" min="0" max="180" value="0" step="1" onmousedown="InputPause()" onmouseup="InputResume()" oninput="updateStamp()" disabled/>
+    </div>
+    <div class="textdiv">
+    Volume: 
+    <input class="settingsSlider" id="volume" type="range" min="-1" max="3" value="1" step="0.1" oninput="updateVolume()"/>
+    </div>
+    <div class="textdiv">
+    Playback Speed: 
+    <input class="settingsSlider" id="playback" type="range" min="0.25" max="1" value="1" step="0.05" oninput="updateSpeed()"/>
+    </div>
+
+    <div class="linkdiv">
+        <button id="linkbtn" onclick="shareRoom()">Generate Link</button><br>
+        <input id="linkbox" type="text" readonly/>
+    </div>
+
+    <script src="watch.js" defer></script>
 </body>
 </html>
