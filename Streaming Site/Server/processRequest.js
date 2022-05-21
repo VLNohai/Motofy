@@ -5,6 +5,7 @@ const songdatabase = require('./songdatabase').songdatabase;
 const { type } = require('express/lib/response');
 const { createBrotliCompress } = require('zlib');
 const { roomdatabase, room } = require('./roomdatabase');
+const { album } = require('./songdatabase');
 
 userDatabase.init();
 
@@ -107,6 +108,19 @@ function giveSongList(items, res)
     {
         message += underscoresToSpaces(targetSongs[i].title) + '%' + underscoresToSpaces(targetSongs[i].album) + '%' + targetSongs[i].id + '|'
     }
+    message = message.slice(0, -1);
+    res.end(message);
+}
+
+function giveAlbum(items, res)
+{
+    let song = songdatabase.songids[items[0]];
+    console.log(song);
+    let albumsongs = songdatabase.albums[song.album].songids;
+    let message = "albumsongs ";
+    albumsongs.forEach(songid => {
+        message += songid + "%" + songdatabase.songids[songid].title + "|"
+    });
     message = message.slice(0, -1);
     res.end(message);
 }
@@ -239,8 +253,27 @@ function giveProfileInfo(items, res){
 
 function createRoom(items, res){
     let newroom = new room(items[0], items[1]);
-    newroom.start();
     res.end("roomid " + newroom.id); 
+}
+
+function updateRoom(items, res){
+    let roomID = items[0];
+    let songID = items[1];
+    let clock = items[2];
+    let paused = items[3];
+
+    let room = roomdatabase.rooms[roomID];
+    room.clock = clock;
+    room.songid = songID;
+    room.paused = paused;
+    console.log(clock + " " + songID + " " + paused);
+    res.end('ok');
+}
+
+function giveRoom(items, res){
+    let room = roomdatabase.rooms[items[0]];
+    let message = "roomstate " + room.songid + " " + room.clock + " " + room.paused;
+    res.end(message);
 }
 
 
@@ -253,11 +286,14 @@ function processRequest(message, address, res){
         case "login": login(items, res); break;
         case "register": register(items, res); break;
         case "song": giveSong(items, res); break;
+        case "album": giveAlbum(items, res); break;
         case "artists": giveArtistList(items, res); break;
         case "songs": giveSongList(items, res); break;
         case "recommend": recommend(items, res); break;
         case "profile": giveProfileInfo(items, res); break;
         case "room": createRoom(items, res); break;
+        case "updateRoom": updateRoom(items, res); break;
+        case "getroom": giveRoom(items, res); break;
     }
 }
 

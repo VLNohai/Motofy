@@ -9,6 +9,7 @@ var artistdatabase = require('./artistdatabase');
 const songdatabase = require('./songdatabase').songdatabase;
 const userDatabase = require('./userDatabase');
 const { isNullOrUndefined } = require('util');
+const { roomdatabase } = require('./roomdatabase');
 
 var myRouter = new router();
 
@@ -33,6 +34,17 @@ myRouter.addroute(['/watch'], (req, res, arg) => {
         fs.createReadStream(__dirname + '/../Client/artistlist.html').pipe(res);
     else
     if(arg in songdatabase.songids)
+        fs.createReadStream(__dirname + '/../Client/watch.html').pipe(res);
+    else
+        fs.createReadStream(__dirname + '/../Client/Error.html').pipe(res);
+}, true)
+
+myRouter.addroute(['/shared'], (req, res, arg) => {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    if(arg == null || arg == undefined)
+        fs.createReadStream(__dirname + '/../Client/artistlist.html').pipe(res);
+    else
+    if(arg in roomdatabase.rooms)
         fs.createReadStream(__dirname + '/../Client/watch.html').pipe(res);
     else
         fs.createReadStream(__dirname + '/../Client/Error.html').pipe(res);

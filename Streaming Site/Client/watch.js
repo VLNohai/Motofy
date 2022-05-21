@@ -21,49 +21,138 @@ let title = document.getElementById('title');
 let cover = document.getElementById('cover');
 let linkButton = document.getElementById('linkbtn');
 let linkBox = document.getElementById('linkbox');
+let albumdiv = document.getElementById('albumdiv');
+
+let roomID = "";
+let songID = "";
+
+let modetokens = window.location.href.split('/');
+let mode = modetokens[modetokens.length - 1].split('?')[0];
+console.log(mode);
 
 const request = new XMLHttpRequest();
 request.open('POST', '/query');
-request.send('song ' + window.location.href.split('?')[1]  + ' ' + userToken);
-console.log('song ' + window.location.href.split('?')[1]  + ' ' + userToken);
+if(mode == 'watch')
+{
+    songID = window.location.href.split('?')[1];
+    request.send('song ' + window.location.href.split('?')[1]  + ' ' + userToken);
+}
+    else
+{
+    linkButton.disabled = true;
+    linkBox.disabled = true;
+    setInterval(getRoom, 500);
+}
+
 request.addEventListener("readystatechange", function () {
     if (this.readyState === 4) {
         if(request.status == 200){
             if(request.response.split(' ')[0] == "roomid"){
-                console.log(linkBox);
-                linkBox.value = "localhost:3000/shared?" + request.response.split(' ')[1];
+                roomID = request.response.split(' ')[1];
+                linkBox.value = "localhost:3000/shared?" + roomID;
+                setInterval(hostRoom, 500);
+                request.open('POST', '/query');
+                request.send('album ' + songID);
             }
+            else
+            if(request.response.split(' ')[0] == "albumsongs"){
+                let songs = request.response.split(' ')[1].split('|')
+                console.log(request.response)
+                songs.forEach(song => {
+                    let tokens = song.split('%');
+                    let id = tokens[0];
+                    let title = tokens[1];
+                    addSongButton(id, title);
+                });
+            }
+            else
+            if(request.response.split(' ')[0] == "roomstate"){
+                console.log(request.response);
+                let tokens = request.response.split(' ');
+                let r_songid = tokens[1];
+                let r_second = tokens[2];
+                let r_paused = (tokens[3] == 'true');
+                if(r_songid != songID){
+
+                    songID = r_songid;
+                    if(playing)
+                        Pause();
+                    streaming = false;
+                    updateStamp();
+                    request.open('POST', '/query');
+                    request.send('song ' + songID  + ' ' + userToken);
+                }
+                if(Math.abs(Math.round(parseInt(r_second) - Math.floor(timeline.value))) > 2){
+                    timeline.value = r_second;
+                    updateStamp();
+                    if(streaming)
+                        InputResume();
+                }
+                if(r_paused == playing){
+                    if(streaming){
+                    if(r_paused == true)
+                        Pause();
+                    else
+                        Resume();
+                    }
+                }
+            }
+            else
+            if(request.response.split(' ')[0] == "ok"){}
             else
             {
                 let tokens = request.response.split('%');
+                volumeKnob.value = 1;
 
                 songName = tokens[0];
                 artistName = tokens[1];
                 albumName = tokens[2];
                 albumPhoto = tokens[3];
-                console.log(albumPhoto);
                 songduration = parseInt(tokens[4]);
                 mp3URL = "Resources/Songs/" + artistName + '/' + albumName  + '/' + songName + '.mp3';
-                console.log(mp3URL);
+
                 title.textContent = artistName + " - " + songName + ' (From ' + albumName + ')';
                 cover.setAttribute('src', albumPhoto);
 
                 timeline.max = songduration + 1;
-                timeStamp.textContent = timeStamp.textContent + " - " + formatTimeStamp("" + songduration);
+                timeStamp.textContent = formatTimeStamp(timeline.value) + " - " + formatTimeStamp("" + songduration);
                 playButton.disabled = false;
             }
         }
     }
 })
 
-async function hostRoom(){
+function getRoom(){
+    request.open('POST', '/query');
+    request.send('getroom ' + window.location.href.split('?')[1]);
+}
 
+function hostRoom(){
+    request.open('POST', '/query');
+    request.send('updateRoom ' + roomID  + ' ' + songID + ' ' + Math.floor(timeline.value) + ' ' + !playing);
 }
 
 function shareRoom(){
     request.open('POST', '/query');
     request.send('room ' + window.location.href.split('?')[1]  + ' ' + userToken);
     linkButton.disabled = true;
+}
+
+function addSongButton(id, name){
+    let button = document.createElement('button');
+    button.textContent = name;
+    button.setAttribute('onclick', 'onSongClicked(' + "'"+ id +"'" + ')');
+    albumdiv.appendChild(button);
+}
+
+function onSongClicked(id){
+    songID = id;
+    Pause();
+    streaming = false;
+    timeline.value = 0;
+    updateStamp();
+    request.open('POST', '/query');
+    request.send('song ' + id  + ' ' + userToken);
 }
 
 async function createReverb() {
@@ -137,7 +226,7 @@ async function setupContext(audio, context)
     playSound.connect(context.destination);
     playSound.connect(gainNode);
     playSound.connect(reverb);
-    playSound.start(context.currentTime);
+    playSound.start(context.currentTime, parseInt(timeline.value));
 }
 
 function PlayButtonPressed()
@@ -145,6 +234,10 @@ function PlayButtonPressed()
     if(!streaming)
     {
         BeginStream();
+        if(mode == "shared"){
+            playButton.disabled = true;
+            timeline.disabled = true;
+        }
         streaming = true;
         playing = true;
         return;
@@ -208,5 +301,5 @@ function BeginStream()
     .then(arrayBuffer => context.decodeAudioData(arrayBuffer))
     .then(decodedAudio => (
         setupContext(decodedAudio, context)
-    ))
+    ));
 }

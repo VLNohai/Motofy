@@ -72,6 +72,7 @@ class userDatabase{
                     data += genre + ':' + this.users[key].preferences[genre] + '%';
                 });
                 data = data.slice(0, -1);
+                data += '\n';
             });
             fs.writeFileSync('Server\\userlist.txt', data);
     }

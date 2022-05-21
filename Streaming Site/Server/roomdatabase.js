@@ -11,9 +11,8 @@ class room{
     constructor(_songid, _admin){
         this.admin = _admin;
         this.songid = _songid
-        this.second = 0;
-    }
-    start(){
+        this.clock = 0;
+        this.paused = true;
         this.id = makeid(6);
         while(this.id in roomdatabase.rooms){
             this.id = makeid(6);

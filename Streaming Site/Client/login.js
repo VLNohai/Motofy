@@ -53,7 +53,7 @@ function registerUser(){
         }
         else
         {
-            alert("credentials must have 6 at least 6 characters");
+            alert("credentials must have at least 6 characters");
         }
     }
     else
@@ -63,5 +63,5 @@ function registerUser(){
 }
 
 function goToRegister(){
-    window.location.assign('http://http://192.168.1.108:3000/register');
+    window.location.assign('http://localhost:3000/register');
 }
